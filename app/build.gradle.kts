@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 android {
@@ -54,6 +55,7 @@ dependencies {
     ksp (libs.compiler)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
 
     implementation (libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.androidx.lifecycle.livedata.ktx)
