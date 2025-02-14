@@ -9,6 +9,6 @@ interface DeezerApiService {
     @GET("chart")
     suspend fun getChart(
         @Query("limit") limit: Int = 30,
-        @Query("index") index: Int = 0
+        @Query("index") index: Int
     ): TracksResponse
 }

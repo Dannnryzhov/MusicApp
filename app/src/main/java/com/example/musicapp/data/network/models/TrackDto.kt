@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TrackDto(
-    @SerializedName("id") val id: Int,
+    @SerializedName("id") val id: Long,
     @SerializedName("title") val title: String,
     @SerializedName("preview") val preview:String,
     @SerializedName("artist") val artist: ArtistDto,
