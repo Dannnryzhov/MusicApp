@@ -9,5 +9,5 @@ class ManageDownloadedTracksUseCase @Inject constructor (
 ) {
     suspend fun add(track: TrackEntity) = repository.addToDownloaded(track)
     suspend fun remove(track: TrackEntity) = repository.removeFromDownloaded(track)
-    fun getFavorites() = repository.getDownloadedTracks()
+    fun getDownloaded() = repository.getDownloadedTracks()
 }

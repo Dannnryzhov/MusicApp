@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.musicapp.R
 import com.example.musicapp.databinding.FragmentMainTracksBinding
+import com.example.musicapp.domain.usecases.ManageDownloadedTracksUseCase
 import com.example.musicapp.presentation.adapters.TracksAdapter
 import com.example.musicapp.presentation.application.MusicApp
 import com.example.musicapp.presentation.viewmodels.MainTracksViewModel
@@ -24,8 +27,15 @@ class MainTracksFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
     private lateinit var viewModel: MainTracksViewModel
+
     private lateinit var tracksAdapter: TracksAdapter
+
+    @Inject
+    lateinit var manageDownloadedTracksUseCase: ManageDownloadedTracksUseCase
+
+    private var downloadedTrackIds = mutableSetOf<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,17 +47,21 @@ class MainTracksFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         (requireActivity().application as MusicApp).component.inject(this)
 
         viewModel = ViewModelProvider(this, viewModelFactory)[MainTracksViewModel::class.java]
 
         tracksAdapter = TracksAdapter(
             onItemClick = {
-                TODO()
             },
-            onItemLongClick = {
-                TODO()
+            onItemLongClick = { track ->
+                lifecycleScope.launch {
+                    if (downloadedTrackIds.contains(track.id)) {
+                        manageDownloadedTracksUseCase.remove(track)
+                    } else {
+                        manageDownloadedTracksUseCase.add(track)
+                    }
+                }
             }
         )
 
@@ -67,11 +81,24 @@ class MainTracksFragment : Fragment() {
             })
         }
 
+        lifecycleScope.launch {
+            manageDownloadedTracksUseCase.getDownloaded().collect { downloadedTracks ->
+                downloadedTrackIds = downloadedTracks.map { it.id }.toMutableSet()
+            }
+        }
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             viewModel.tracks.collect { tracks ->
                 tracksAdapter.submitList(tracks)
             }
+        }
+
+        binding.navigationContainer.findViewById<View>(R.id.nav_downloaded).setOnClickListener {
+            findNavController().navigate(R.id.action_mainTracksFragment_to_downloadedTracksFragment)
+        }
+
+        binding.navigationContainer.findViewById<View>(R.id.nav_home).setOnClickListener {
+
         }
     }
 
