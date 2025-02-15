@@ -17,18 +17,33 @@ class MainTracksViewModel @Inject constructor(
     private val _tracks = MutableStateFlow<List<TrackEntity>>(emptyList())
     val tracks: StateFlow<List<TrackEntity>> = _tracks
 
+    private var currentIndex = 0
+    private var isLoading = false
+    private var hasMore = true
+
     init {
         fetchTracks()
     }
 
     fun fetchTracks() {
+        if (isLoading || !hasMore) return
+
+        isLoading = true
+
         viewModelScope.launch {
             try {
-                val tracksList = getTracksListUseCase(0)
-                Log.d("MainTracksViewModel", "Fetched ${tracksList.size} tracks")
-                _tracks.value = tracksList
+                val newTracks = getTracksListUseCase(currentIndex)
+                Log.d("MainTracksViewModel", "Fetched ${newTracks.size} tracks")
+                if (newTracks.isEmpty()) {
+                    hasMore = false
+                } else {
+                    _tracks.value += newTracks
+                    currentIndex += 30
+                }
             } catch (e: Exception) {
                 Log.e("MainTracksViewModel", "Error fetching tracks", e)
+            } finally {
+                isLoading = false
             }
         }
     }

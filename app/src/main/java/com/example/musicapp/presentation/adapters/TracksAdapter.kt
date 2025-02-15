@@ -26,6 +26,10 @@ class TracksAdapter(
         setHasStableIds(true)
     }
 
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id
+    }
+
     inner class TrackViewHolder(private val binding: TrackItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 

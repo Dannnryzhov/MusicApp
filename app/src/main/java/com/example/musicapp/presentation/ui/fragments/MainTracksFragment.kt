@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.musicapp.databinding.FragmentMainTracksBinding
 import com.example.musicapp.presentation.adapters.TracksAdapter
 import com.example.musicapp.presentation.application.MusicApp
@@ -39,8 +40,7 @@ class MainTracksFragment : Fragment() {
 
         (requireActivity().application as MusicApp).component.inject(this)
 
-        viewModel = ViewModelProvider(this, viewModelFactory)
-            .get(MainTracksViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainTracksViewModel::class.java]
 
         tracksAdapter = TracksAdapter(
             onItemClick = {
@@ -54,7 +54,19 @@ class MainTracksFragment : Fragment() {
         binding.tracksRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = tracksAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val totalItemCount = layoutManager.itemCount
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (totalItemCount > 0 && lastVisibleItemPosition >= totalItemCount - 5) {
+                        viewModel.fetchTracks()
+                    }
+                }
+            })
         }
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.tracks.collect { tracks ->
