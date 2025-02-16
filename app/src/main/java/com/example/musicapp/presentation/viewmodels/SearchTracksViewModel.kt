@@ -20,11 +20,17 @@ class SearchTracksViewModel @Inject constructor(
     fun search(query: String) {
         viewModelScope.launch {
             try {
-                val results = searchTracksUseCase(query)
-                _searchResults.value = results
+                if (query.isNotBlank()) {
+                    val results = searchTracksUseCase(query)
+                    _searchResults.value = results
+                } else {
+                    _searchResults.value = emptyList()
+                }
             } catch (e: Exception) {
                 Log.e("SearchTracksViewModel", "Error searching tracks", e)
             }
         }
     }
 }
+
+

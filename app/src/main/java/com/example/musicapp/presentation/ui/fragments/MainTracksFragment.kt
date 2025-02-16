@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainTracksFragment : Fragment() {
-
     private var _binding: FragmentMainTracksBinding? = null
     private val binding get() = _binding!!
 
@@ -31,9 +30,7 @@ class MainTracksFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var viewModel: MainTracksViewModel
-
     private lateinit var searchViewModel: SearchTracksViewModel
-
     private lateinit var tracksAdapter: TracksAdapter
 
     @Inject
@@ -54,14 +51,13 @@ class MainTracksFragment : Fragment() {
         (requireActivity().application as MusicApp).component.inject(this)
 
         viewModel = ViewModelProvider(this, viewModelFactory)[MainTracksViewModel::class.java]
+        searchViewModel = ViewModelProvider(this, viewModelFactory).get(SearchTracksViewModel::class.java)
 
         tracksAdapter = TracksAdapter(
             onItemClick = { track ->
-                val action = MainTracksFragmentDirections
-                    .actionMainTracksFragmentToPlayTrackFragment(track.title,
-                        track.artist.name,
-                        track.album.cover,
-                        track.preview)
+                val action = MainTracksFragmentDirections.actionMainTracksFragmentToPlayTrackFragment(
+                    track.title, track.artist.name, track.album.cover, track.preview
+                )
                 findNavController().navigate(action)
             },
             onItemLongClick = { track ->
@@ -90,13 +86,16 @@ class MainTracksFragment : Fragment() {
                 }
             })
         }
-        searchViewModel = ViewModelProvider(this, viewModelFactory)
-            .get(SearchTracksViewModel::class.java)
+
+        lifecycleScope.launch {
+            searchViewModel.searchResults.collect { searchResults ->
+                tracksAdapter.submitList(searchResults)
+            }
+        }
+
         binding.searchEditText.addTextChangedListener { editable ->
             val query = editable?.toString() ?: ""
-            if (query.isNotBlank()) {
-                searchViewModel.search(query)
-            }
+            searchViewModel.search(query)
         }
 
         lifecycleScope.launch {
@@ -116,11 +115,8 @@ class MainTracksFragment : Fragment() {
         }
 
         binding.navigationContainer.findViewById<View>(R.id.nav_home).setOnClickListener {
-
         }
-
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

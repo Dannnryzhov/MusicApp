@@ -29,7 +29,7 @@ class PlayTrackFragment : Fragment() {
 
         binding.trackTitleTextView.text = args.trackTitle
         binding.artistNameTextView.text = args.artistName
-        Glide.with(this)
+        Glide.with(binding.coverImageView.context)
             .load(args.coverImage)
             .into(binding.coverImageView)
 
