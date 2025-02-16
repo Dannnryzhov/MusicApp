@@ -11,4 +11,10 @@ interface DeezerApiService {
         @Query("limit") limit: Int = 30,
         @Query("index") index: Int
     ): TracksResponse
+
+    @GET("search")
+    suspend fun searchTracks(
+        @Query("q") query: String,
+        @Query("limit") limit: Int = 15
+    ): TracksResponse
 }

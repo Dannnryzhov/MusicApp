@@ -41,11 +41,19 @@ class DownloadedTracksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity().application as MusicApp).component.inject(this)
 
-        viewModel = ViewModelProvider(this, viewModelFactory)
-            .get(DownloadedTracksViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this, viewModelFactory
+        )[DownloadedTracksViewModel::class.java]
 
         tracksAdapter = TracksAdapter(
-            onItemClick = {
+            onItemClick = { track ->
+                val action = MainTracksFragmentDirections
+                    .actionMainTracksFragmentToPlayTrackFragment(
+                        track.title,
+                        track.artist.name,
+                        track.album.cover,
+                        track.preview)
+                findNavController().navigate(action)
             },
             onItemLongClick = { track ->
                 lifecycleScope.launch {

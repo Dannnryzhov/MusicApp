@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/mainTracksFragment">
 
@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_mainTracksFragment_to_downloadedTracksFragment"
             app:destination="@id/downloadedTracksFragment"/>
+        <action
+            android:id="@+id/action_mainTracksFragment_to_playTrackFragment"
+            app:destination="@id/playTrackFragment"/>
     </fragment>
 
     <fragment
@@ -21,5 +24,28 @@
         <action
             android:id="@+id/action_downloadedTracksFragment_to_mainTracksFragment"
             app:destination="@id/mainTracksFragment"/>
+        <action
+            android:id="@+id/action_downloadedTracksFragment_to_playTrackFragment"
+            app:destination="@id/playTrackFragment"/>
     </fragment>
+    <fragment
+        android:id="@+id/playTrackFragment"
+        android:name="com.example.musicapp.presentation.ui.fragments.PlayTrackFragment"
+        android:label="fragment_play_track"
+        tools:layout="@layout/fragment_play_track">
+
+        <argument
+            android:name="trackTitle"
+            app:argType="string" />
+        <argument
+            android:name="artistName"
+            app:argType="string" />
+        <argument
+            android:name="coverImage"
+            app:argType="string"/>
+        <argument
+            android:name="preview"
+            app:argType="string"/>
+    </fragment>
+
 </navigation>

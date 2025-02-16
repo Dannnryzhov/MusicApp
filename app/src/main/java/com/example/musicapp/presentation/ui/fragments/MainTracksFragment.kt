@@ -16,7 +16,9 @@ import com.example.musicapp.domain.usecases.ManageDownloadedTracksUseCase
 import com.example.musicapp.presentation.adapters.TracksAdapter
 import com.example.musicapp.presentation.application.MusicApp
 import com.example.musicapp.presentation.viewmodels.MainTracksViewModel
+import com.example.musicapp.presentation.viewmodels.SearchTracksViewModel
 import com.example.musicapp.presentation.viewmodels.ViewModelFactory
+import androidx.core.widget.addTextChangedListener
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +31,8 @@ class MainTracksFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var viewModel: MainTracksViewModel
+
+    private lateinit var searchViewModel: SearchTracksViewModel
 
     private lateinit var tracksAdapter: TracksAdapter
 
@@ -52,7 +56,13 @@ class MainTracksFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[MainTracksViewModel::class.java]
 
         tracksAdapter = TracksAdapter(
-            onItemClick = {
+            onItemClick = { track ->
+                val action = MainTracksFragmentDirections
+                    .actionMainTracksFragmentToPlayTrackFragment(track.title,
+                        track.artist.name,
+                        track.album.cover,
+                        track.preview)
+                findNavController().navigate(action)
             },
             onItemLongClick = { track ->
                 lifecycleScope.launch {
@@ -80,6 +90,14 @@ class MainTracksFragment : Fragment() {
                 }
             })
         }
+        searchViewModel = ViewModelProvider(this, viewModelFactory)
+            .get(SearchTracksViewModel::class.java)
+        binding.searchEditText.addTextChangedListener { editable ->
+            val query = editable?.toString() ?: ""
+            if (query.isNotBlank()) {
+                searchViewModel.search(query)
+            }
+        }
 
         lifecycleScope.launch {
             manageDownloadedTracksUseCase.getDownloaded().collect { downloadedTracks ->
@@ -100,7 +118,9 @@ class MainTracksFragment : Fragment() {
         binding.navigationContainer.findViewById<View>(R.id.nav_home).setOnClickListener {
 
         }
+
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

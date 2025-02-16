@@ -10,8 +10,14 @@
     <dimen name="nav_icon_width">32dp</dimen>
     <dimen name="nav_icon_height">32dp</dimen>
 
+    <dimen name="play_icon_width">48dp</dimen>
+    <dimen name="play_icon_height">48dp</dimen>
+
     <dimen name="track_icon_width">48dp</dimen>
     <dimen name="track_icon_height">48dp</dimen>
 
     <dimen name="search_card_corner_radius">8dp</dimen>
+
+    <dimen name="margin_top_player">48dp</dimen>
+    <dimen name="margin_bottom_player">16dp</dimen>
 </resources>
