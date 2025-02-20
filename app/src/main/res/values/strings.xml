@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">MusicApp</string>
+    <string name="downloaded">Сохраненное</string>
+    <string name="home">Главная</string>
+    <string name="track_title">Название трека</string>
+    <string name="artist_name">Имя исполнителя</string>
+    <string name="track_cover">Обложка трека</string>
+    <string name="search">Поиск...</string>
+    <string name="play">Воспроизвести</string>
+    <string name="pause">Пауза</string>
+    <string name="next">Следующий трек</string>
+    <string name="previous">Предыдущий трек</string>
+    <string name="artist">Имя Артиста</string>
+    <string name="play_track_title">Название трека</string>
 </resources>

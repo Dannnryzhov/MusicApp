@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding_standard"
+    android:background="@color/search_background">
+
+    <ImageView
+        android:id="@+id/track_picture"
+        android:layout_width="@dimen/track_icon_width"
+        android:layout_height="@dimen/track_icon_height"
+        android:layout_marginEnd="@dimen/padding_small"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_foreground"
+        android:contentDescription="@string/track_cover"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/track_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/track_title"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintStart_toEndOf="@id/track_picture"
+        app:layout_constraintTop_toTopOf="@id/track_picture"
+        app:layout_constraintEnd_toStartOf="@id/track_extra_icon" />
+
+    <TextView
+        android:id="@+id/track_artist"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/artist_name"
+        android:textColor="#B0B0B0"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintStart_toStartOf="@id/track_title"
+        app:layout_constraintTop_toBottomOf="@id/track_title"
+        app:layout_constraintEnd_toStartOf="@id/track_extra_icon"
+        app:layout_constraintBottom_toBottomOf="@id/track_picture" />
+
+    <ImageView
+        android:id="@+id/track_extra_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:visibility="invisible"
+        android:layout_marginStart="@dimen/padding_small"
+        android:src="@drawable/ic_downloaded"
+        android:contentDescription="@string/downloaded"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
