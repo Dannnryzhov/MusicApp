@@ -1,7 +1,7 @@
 package com.example.musicapp.di
 
 import androidx.lifecycle.ViewModel
-import com.example.musicapp.presentation.viewmodels.MainTracksViewModel
+import com.example.musicapp.presentation.viewmodels.TracksListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -10,6 +10,6 @@ import dagger.multibindings.IntoMap
 interface ViewModelModule {
     @Binds
     @IntoMap
-    @ViewModelKey(MainTracksViewModel::class)
-    fun bindMainTracksViewModel(viewModel: MainTracksViewModel): ViewModel
+    @ViewModelKey(TracksListViewModel::class)
+    fun bindMainTracksViewModel(viewModel: TracksListViewModel): ViewModel
 }

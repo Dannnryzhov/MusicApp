@@ -2,20 +2,11 @@ package com.example.musicapp.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.musicapp.databinding.TrackItemBinding
 import com.example.musicapp.domain.models.TrackEntity
-
-class TrackDiffCallBack : DiffUtil.ItemCallback<TrackEntity>() {
-    override fun areItemsTheSame(oldItem: TrackEntity, newItem: TrackEntity): Boolean =
-        oldItem.id == newItem.id
-
-    override fun areContentsTheSame(oldItem: TrackEntity, newItem: TrackEntity): Boolean =
-        oldItem == newItem
-}
 
 class TracksAdapter(
     private val onItemClick: (TrackEntity) -> Unit,
@@ -25,6 +16,8 @@ class TracksAdapter(
     init {
         setHasStableIds(true)
     }
+
+    override fun getItemId(position: Int): Long = getItem(position).id
 
     inner class TrackViewHolder(private val binding: TrackItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

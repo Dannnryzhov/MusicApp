@@ -4,5 +4,5 @@
     android:id="@+id/fragment_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout="@layout/fragment_main_tracks">
+    tools:layout="@layout/fragment_tracks_list">
 </androidx.fragment.app.FragmentContainerView>

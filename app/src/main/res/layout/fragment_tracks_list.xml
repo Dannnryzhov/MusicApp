@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="@dimen/margin_standard"
-        android:elevation="4dp">
+        android:elevation="@dimen/search_card_view_elevation">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,6 +59,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/track_item"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
     <LinearLayout

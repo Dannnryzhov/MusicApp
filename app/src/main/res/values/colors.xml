@@ -5,4 +5,5 @@
     <color name="search_background">#24252A</color>
     <color name="navigation_background">#24252A</color>
     <color name="white">#FFFFFF</color>
+    <color name="gray">#B0B0B0</color>
 </resources>
