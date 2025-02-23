@@ -51,17 +51,8 @@ class TracksListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.tracksRecyclerView.apply {
             setupRecyclerView()
             observeTracks()
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.tracks.collect { tracks ->
-                tracksAdapter.submitList(tracks)
-            }
-        }
     }
 
     private fun injectDependencies() {
