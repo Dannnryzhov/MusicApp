@@ -28,11 +28,9 @@ class TracksListViewModel @Inject constructor(
     }
 
     fun fetchTracks() {
-            viewModelScope.launch(exceptionHandler) {
-                val tracksList = getTracksListUseCase(0)
-                Log.d("MainTracksViewModel", "Fetched ${tracksList.size} tracks")
-                _tracks.value = tracksList
-            }
-        }
+        viewModelScope.launch(exceptionHandler) {
+            val tracksList = getTracksListUseCase(0)
+            Log.d("MainTracksViewModel", "Fetched ${tracksList.size} tracks")
+            _tracks.value = tracksList }
     }
 }
