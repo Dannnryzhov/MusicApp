@@ -8,4 +8,5 @@ interface TracksRepository {
     suspend fun addToDownloaded(track: TrackEntity)
     suspend fun removeFromDownloaded(track: TrackEntity)
     fun getDownloadedTracks(): Flow<List<TrackEntity>>
+    suspend fun searchTracks(query: String): List<TrackEntity>
 }

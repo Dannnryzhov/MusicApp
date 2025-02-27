@@ -2,6 +2,8 @@ package com.example.musicapp.presentation.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import com.example.musicapp.databinding.FragmentTracksListBinding
 import com.example.musicapp.domain.models.TrackEntity
 import com.example.musicapp.presentation.adapters.TracksAdapter
 import com.example.musicapp.presentation.application.MusicApp
+import com.example.musicapp.presentation.viewmodels.SearchTracksViewModel
 import com.example.musicapp.presentation.viewmodels.TracksListViewModel
 import com.example.musicapp.presentation.viewmodels.ViewModelFactory
 import kotlinx.coroutines.flow.launchIn
@@ -28,9 +31,11 @@ class TracksListFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
     private val viewModel: TracksListViewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[TracksListViewModel::class.java]
     }
+
     private val tracksAdapter: TracksAdapter by lazy {
         TracksAdapter(
             onItemClick = { track -> onTrackClicked(track) },
