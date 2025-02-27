@@ -1,5 +1,8 @@
 package com.example.musicapp.data.mapper
 
+import com.example.musicapp.data.database.models.AlbumDbEntity
+import com.example.musicapp.data.database.models.ArtistDbEntity
+import com.example.musicapp.data.database.models.TrackDbEntity
 import com.example.musicapp.data.network.models.AlbumDto
 import com.example.musicapp.data.network.models.ArtistDto
 import com.example.musicapp.data.network.models.TrackDto
@@ -30,6 +33,35 @@ fun TrackDto.toDomain(): TrackEntity {
         album = this.album.toDomain()
     )
 }
-fun TracksDto.toDomainList(): List<TrackEntity> {
-    return this.data.map { it.toDomain() }
+
+fun TrackEntity.toDbEntity(): TrackDbEntity {
+    return TrackDbEntity(
+        id = this.id,
+        title = this.title,
+        preview = this.preview,
+        artist = ArtistDbEntity(
+            id = this.artist.id,
+            name = this.artist.name
+        ),
+        album = AlbumDbEntity(
+            id = this.album.id,
+            cover = this.album.cover
+        )
+    )
+}
+
+fun TrackDbEntity.toDomain(): TrackEntity {
+    return TrackEntity(
+        id = this.id,
+        title = this.title,
+        preview = this.preview,
+        artist = ArtistEntity(
+            id = this.artist.id,
+            name = this.artist.name
+        ),
+        album = AlbumEntity(
+            id = this.album.id,
+            cover = this.album.cover
+        )
+    )
 }
