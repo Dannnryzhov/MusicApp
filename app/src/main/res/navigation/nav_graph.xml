@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/tracksListFragment">
+
+    <fragment
+        android:id="@+id/tracksListFragment"
+        android:name="com.example.musicapp.presentation.ui.fragments.TracksListFragment"
+        android:label="Tracks">
+        <action
+            android:id="@+id/action_tracksListFragment_to_downloadedTracksFragment"
+            app:destination="@id/downloadedTracksFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/downloadedTracksFragment"
+        android:name="com.example.musicapp.presentation.ui.fragments.DownloadedTracksFragment"
+        android:label="Downloaded Tracks">
+        <action
+            android:id="@+id/action_downloadedTracksFragment_to_tracksListFragment"
+            app:destination="@id/tracksListFragment"/>
+    </fragment>
+
+</navigation>

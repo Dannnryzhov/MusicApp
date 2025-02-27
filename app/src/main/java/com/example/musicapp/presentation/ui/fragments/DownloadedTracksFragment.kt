@@ -9,28 +9,30 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.musicapp.R
-import com.example.musicapp.databinding.FragmentTracksListBinding
+import com.example.musicapp.databinding.FragmentDownloadedTracksBinding
 import com.example.musicapp.domain.models.TrackEntity
 import com.example.musicapp.presentation.adapters.TracksAdapter
 import com.example.musicapp.presentation.application.MusicApp
-import com.example.musicapp.presentation.viewmodels.TracksListViewModel
+import com.example.musicapp.presentation.viewmodels.DownloadedTracksViewModel
 import com.example.musicapp.presentation.viewmodels.ViewModelFactory
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TracksListFragment : Fragment() {
+class DownloadedTracksFragment : Fragment() {
 
-    private var _binding: FragmentTracksListBinding? = null
+    private var _binding: FragmentDownloadedTracksBinding? = null
     private val binding get() = _binding!!
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private val viewModel: TracksListViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[TracksListViewModel::class.java]
+
+    private val viewModel: DownloadedTracksViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[DownloadedTracksViewModel::class.java]
     }
+
     private val tracksAdapter: TracksAdapter by lazy {
         TracksAdapter(
             onItemClick = { track -> onTrackClicked(track) },
@@ -47,16 +49,16 @@ class TracksListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTracksListBinding.inflate(inflater, container, false)
+        _binding = FragmentDownloadedTracksBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-            setupRecyclerView()
-            observeTracks()
-        binding.navigationContainer.findViewById<View>(R.id.nav_downloaded).setOnClickListener {
-            findNavController().navigate(R.id.action_tracksListFragment_to_downloadedTracksFragment)
+        setupRecyclerView()
+        observeTracks()
+        binding.navigationContainer.findViewById<View>(R.id.nav_home).setOnClickListener {
+            findNavController().navigate(R.id.action_downloadedTracksFragment_to_tracksListFragment)
         }
     }
 
@@ -65,7 +67,10 @@ class TracksListFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        binding.tracksRecyclerView.adapter = tracksAdapter
+        binding.tracksRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = tracksAdapter
+        }
     }
 
     private fun observeTracks() {
@@ -78,8 +83,9 @@ class TracksListFragment : Fragment() {
     }
 
     private fun onTrackLongClicked(track: TrackEntity) {
-        viewModel.toggleDownloadedTrack(track)
+        viewModel.removeFromDownloaded(track)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
