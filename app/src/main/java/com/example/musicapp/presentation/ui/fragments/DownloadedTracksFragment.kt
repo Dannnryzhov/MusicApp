@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +20,7 @@ import com.example.musicapp.presentation.viewmodels.DownloadedTracksViewModel
 import com.example.musicapp.presentation.viewmodels.ViewModelFactory
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DownloadedTracksFragment : Fragment() {
@@ -57,9 +59,8 @@ class DownloadedTracksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         observeTracks()
-        binding.navigationContainer.findViewById<View>(R.id.nav_home).setOnClickListener {
-            findNavController().navigate(R.id.action_downloadedTracksFragment_to_tracksListFragment)
-        }
+        setupSearch()
+        setupNavigation()
     }
 
     private fun injectDependencies() {
@@ -73,10 +74,31 @@ class DownloadedTracksFragment : Fragment() {
         }
     }
 
+    private fun setupSearch(){
+        binding.searchEditText.addTextChangedListener { editable ->
+            val query = editable?.toString() ?: ""
+            viewModel.search(query)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.searchResults.collect { searchResults ->
+                tracksAdapter.submitList(searchResults)
+            }
+        }
+    }
+
     private fun observeTracks() {
         viewModel.tracks
             .onEach { tracks -> tracksAdapter.submitList(tracks) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun setupNavigation() {
+        binding.navigationContainer.findViewById<View>(R.id.nav_home)
+            .setOnClickListener {
+            findNavController()
+                .navigate(R.id.action_downloadedTracksFragment_to_tracksListFragment)
+        }
     }
 
     private fun onTrackClicked(track: TrackEntity) {

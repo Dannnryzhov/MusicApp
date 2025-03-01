@@ -39,4 +39,15 @@ class TracksRepositoryImpl @Inject constructor(
         val response = apiService.searchTracks(query, limit = 30)
         return response.data.map { it.toDomain() }
     }
+
+    override suspend fun searchDownloadedTracks(
+        tracks: List<TrackEntity>,
+        query: String
+    ): List<TrackEntity> {
+        if (query.isBlank()) return tracks
+        return tracks.filter { track ->
+            track.title.contains(query, ignoreCase = true) ||
+                    track.artist.name.contains(query, ignoreCase = true)
+        }
+    }
 }
