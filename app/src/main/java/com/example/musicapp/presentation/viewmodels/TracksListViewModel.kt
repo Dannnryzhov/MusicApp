@@ -22,7 +22,7 @@ class TracksListViewModel @Inject constructor(
     val tracks: StateFlow<List<TrackEntity>> = _tracks.asStateFlow()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Log.e("MainTracksViewModel", "Error fetching tracks", exception)
+        Log.e("TracksListVM", "Error fetching tracks", exception)
     }
 
     init {
@@ -32,7 +32,7 @@ class TracksListViewModel @Inject constructor(
     fun fetchTracks() {
         viewModelScope.launch(exceptionHandler) {
             val tracksList = getTracksListUseCase(0)
-            Log.d("MainTracksViewModel", "Fetched ${tracksList.size} tracks")
+            Log.d("TracksListVM", "Fetched ${tracksList.size} tracks")
             _tracks.value = tracksList }
     }
 

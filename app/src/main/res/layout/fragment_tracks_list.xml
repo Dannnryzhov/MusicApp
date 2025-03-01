@@ -79,6 +79,9 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/ripple_custom"
             android:gravity="center"
             android:padding="@dimen/padding_small">
 
@@ -103,8 +106,13 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+
             android:gravity="center"
-            android:padding="@dimen/padding_small">
+            android:padding="@dimen/padding_small"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/ripple_custom">
+
 
             <ImageView
                 android:id="@+id/nav_downloaded_icon"

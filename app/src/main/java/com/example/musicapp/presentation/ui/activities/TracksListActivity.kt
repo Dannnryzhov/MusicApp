@@ -2,9 +2,7 @@ package com.example.musicapp.presentation.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.NavHostFragment
 import com.example.musicapp.R
-import com.example.musicapp.presentation.ui.fragments.TracksListFragment
 
 class TracksListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

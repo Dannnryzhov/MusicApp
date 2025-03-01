@@ -37,6 +37,6 @@ class TracksRepositoryImpl @Inject constructor(
 
     override suspend fun searchTracks(query: String): List<TrackEntity> {
         val response = apiService.searchTracks(query, limit = 30)
-        return response.tracks.data.map { it.toDomain() }
+        return response.data.map { it.toDomain() }
     }
 }

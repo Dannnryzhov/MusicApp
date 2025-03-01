@@ -2,11 +2,10 @@ package com.example.musicapp.presentation.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -36,6 +35,10 @@ class TracksListFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory)[TracksListViewModel::class.java]
     }
 
+    private val searchViewModel: SearchTracksViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[SearchTracksViewModel::class.java]
+    }
+
     private val tracksAdapter: TracksAdapter by lazy {
         TracksAdapter(
             onItemClick = { track -> onTrackClicked(track) },
@@ -60,9 +63,8 @@ class TracksListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
             setupRecyclerView()
             observeTracks()
-        binding.navigationContainer.findViewById<View>(R.id.nav_downloaded).setOnClickListener {
-            findNavController().navigate(R.id.action_tracksListFragment_to_downloadedTracksFragment)
-        }
+            setupSearch()
+            setupNavigation()
     }
 
     private fun injectDependencies() {
@@ -77,6 +79,26 @@ class TracksListFragment : Fragment() {
         viewModel.tracks
             .onEach { tracks -> tracksAdapter.submitList(tracks) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun setupSearch() {
+        binding.searchEditText.addTextChangedListener { editable ->
+            val query = editable?.toString() ?: ""
+            searchViewModel.search(query)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            searchViewModel.searchResults.collect { searchResults ->
+                tracksAdapter.submitList(searchResults)
+            }
+        }
+    }
+
+    private fun setupNavigation() {
+        binding.navigationContainer.findViewById<View>(R.id.nav_downloaded)
+            .setOnClickListener {
+                findNavController().navigate(R.id.action_tracksListFragment_to_downloadedTracksFragment)
+            }
     }
 
     private fun onTrackClicked(track: TrackEntity) {

@@ -1,5 +1,6 @@
 package com.example.musicapp.data.network
 
+import com.example.musicapp.data.network.models.TracksDto
 import com.example.musicapp.data.network.models.TracksResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -16,5 +17,5 @@ interface DeezerApiService {
     suspend fun searchTracks(
         @Query("q") query: String,
         @Query("limit") limit: Int = 30
-    ): TracksResponse
+    ): TracksDto
 }

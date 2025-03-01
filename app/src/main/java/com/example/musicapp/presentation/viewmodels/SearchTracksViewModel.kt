@@ -8,6 +8,7 @@ import com.example.musicapp.domain.usecases.SearchTracksUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,8 +16,11 @@ class SearchTracksViewModel @Inject constructor(
     private val searchTracksUseCase: SearchTracksUseCase
 ) : ViewModel() {
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
     private val _searchResults = MutableStateFlow<List<TrackEntity>>(emptyList())
-    val searchResults: StateFlow<List<TrackEntity>> = _searchResults
+    val searchResults: StateFlow<List<TrackEntity>> = _searchResults.asStateFlow()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e("SearchTrackVM", "Error search tracks", exception)
@@ -28,7 +32,8 @@ class SearchTracksViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(exceptionHandler) {
-            _searchResults.value = searchTracksUseCase(query)
+            val results = searchTracksUseCase(query)
+            _searchResults.value = results
         }
     }
 }
