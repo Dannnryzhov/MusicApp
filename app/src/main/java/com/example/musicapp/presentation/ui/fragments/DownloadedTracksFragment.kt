@@ -23,10 +23,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DownloadedTracksFragment : Fragment() {
-
-    private var _binding: FragmentDownloadedTracksBinding? = null
-    private val binding get() = _binding!!
+class DownloadedTracksFragment : BaseFragment<FragmentDownloadedTracksBinding>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -42,17 +39,8 @@ class DownloadedTracksFragment : Fragment() {
         )
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        injectDependencies()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentDownloadedTracksBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentDownloadedTracksBinding {
+        return FragmentDownloadedTracksBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,15 +51,12 @@ class DownloadedTracksFragment : Fragment() {
         setupNavigation()
     }
 
-    private fun injectDependencies() {
+    override fun injectDependencies() {
         (requireActivity().application as MusicApp).component.inject(this)
     }
 
     private fun setupRecyclerView() {
-        binding.tracksRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = tracksAdapter
-        }
+        binding.tracksRecyclerView.adapter = tracksAdapter
     }
 
     private fun setupSearch(){
@@ -106,10 +91,5 @@ class DownloadedTracksFragment : Fragment() {
 
     private fun onTrackLongClicked(track: TrackEntity) {
         viewModel.removeFromDownloaded(track)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
