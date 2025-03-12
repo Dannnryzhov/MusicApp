@@ -10,7 +10,7 @@ import javax.inject.Inject
 class DownloadedTracksViewModel @Inject constructor(
     private val manageDownloadedTracksUseCase: ManageDownloadedTracksUseCase,
     private val searchDownloadedTracksUseCase: SearchDownloadedTracksUseCase
-) : BaseViewModel() {
+) : SearchTracksViewModel() {
 
     init {
         viewModelScope.launch {

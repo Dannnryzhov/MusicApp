@@ -13,14 +13,14 @@ class TracksListViewModel @Inject constructor(
     private val getTracksListUseCase: GetTracksListUseCase,
     private val manageDownloadedTracksUseCase: ManageDownloadedTracksUseCase,
     private val searchTracksUseCase: SearchTracksUseCase
-) : BaseViewModel() {
+) : SearchTracksViewModel() {
 
     init {
         fetchTracks()
     }
 
     private fun fetchTracks() {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             val tracksList = getTracksListUseCase(0)
             Log.d("TracksListVM", "Fetched ${tracksList.size} tracks")
             mutableTracks.value = tracksList
@@ -32,8 +32,20 @@ class TracksListViewModel @Inject constructor(
     }
 
     fun toggleDownloadedTrack(track: TrackEntity) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
                 manageDownloadedTracksUseCase.add(track)
+        }
+    }
+
+    fun showTrackDialog() {
+        viewModelScope.launch {
+            sendEvent(TracksListEvents.ShowTrackListDialog("Это диалог из ViewModel"))
+        }
+    }
+
+    fun triggerTestError() {
+        viewModelScope.launch(exceptionHandler) {
+            throw RuntimeException("Тестовая ошибка для проверки диалога")
         }
     }
 }

@@ -3,35 +3,30 @@ package com.example.musicapp.presentation.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.musicapp.domain.models.TrackEntity
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel(
-    private val exceptionHandler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Log.e("BaseTracksVM", "Ошибка при выполнении запроса", exception)
-    }
-) : ViewModel() {
+abstract class BaseViewModel : ViewModel() {
 
-    protected val mutableTracks = MutableStateFlow<List<TrackEntity>>(emptyList())
-    val tracks: StateFlow<List<TrackEntity>> = mutableTracks.asStateFlow()
+    private val _errorEvent = MutableSharedFlow<String>(extraBufferCapacity = 1)
+    val errorEvent = _errorEvent.asSharedFlow()
 
-    private val mutableSearchResults = MutableStateFlow<List<TrackEntity>>(emptyList())
-    val searchResults: StateFlow<List<TrackEntity>> = mutableSearchResults.asStateFlow()
+    private val _eventFlow = MutableSharedFlow<Event>(extraBufferCapacity = 1)
+    val eventFlow = _eventFlow.asSharedFlow()
 
-    protected abstract suspend fun performSearch(query: String): List<TrackEntity>
+    protected val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Log.e("BaseViewModel", "Ошибка: ${exception.localizedMessage}", exception)
 
-    fun search(query: String) {
-        if (query.isBlank()) {
-            mutableSearchResults.value = mutableTracks.value
-            return
+        viewModelScope.launch {
+            _errorEvent.emit("Сообщение: ${exception.localizedMessage}")
         }
-        viewModelScope.launch(exceptionHandler) {
-            val results = performSearch(query)
-            mutableSearchResults.value = results
+    }
+
+    protected fun sendEvent(event: Event) {
+        viewModelScope.launch {
+            _eventFlow.emit(event)
         }
     }
 }

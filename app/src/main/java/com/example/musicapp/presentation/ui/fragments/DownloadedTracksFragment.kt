@@ -1,16 +1,13 @@
 package com.example.musicapp.presentation.ui.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.musicapp.R
 import com.example.musicapp.databinding.FragmentDownloadedTracksBinding
 import com.example.musicapp.domain.models.TrackEntity
@@ -23,12 +20,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DownloadedTracksFragment : BaseFragment<FragmentDownloadedTracksBinding>() {
+class DownloadedTracksFragment : BaseFragment<FragmentDownloadedTracksBinding, DownloadedTracksViewModel>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private val viewModel: DownloadedTracksViewModel by lazy {
+    override val viewModel: DownloadedTracksViewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[DownloadedTracksViewModel::class.java]
     }
 

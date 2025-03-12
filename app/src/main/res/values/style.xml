@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MyAlertDialogStyle" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:background">#24252A</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+    </style>
+
+</resources>
