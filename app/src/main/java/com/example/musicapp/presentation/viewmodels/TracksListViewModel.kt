@@ -37,9 +37,9 @@ class TracksListViewModel @Inject constructor(
         }
     }
 
-    fun showTrackDialog() {
+    fun triggerTestEvent() {
         viewModelScope.launch {
-            sendEvent(TracksListEvents.ShowTrackListDialog("Это диалог из ViewModel"))
+            sendEvent(TracksListEvents.ShowTrackListDialog("Тестовый ивент для проверки диалога"))
         }
     }
 

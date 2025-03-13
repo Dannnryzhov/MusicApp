@@ -29,4 +29,16 @@ class DownloadedTracksViewModel @Inject constructor(
             manageDownloadedTracksUseCase.remove(track)
         }
     }
+
+    fun triggerTestEvent() {
+        viewModelScope.launch {
+            sendEvent(TracksListEvents.ShowTrackListDialog("Тестовый ивент для проверки диалога"))
+        }
+    }
+
+    fun triggerTestError() {
+        viewModelScope.launch(exceptionHandler) {
+            throw RuntimeException("Тестовая ошибка для проверки диалога")
+        }
+    }
 }
