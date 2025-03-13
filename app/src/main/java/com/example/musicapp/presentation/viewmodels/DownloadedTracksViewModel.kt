@@ -32,7 +32,7 @@ class DownloadedTracksViewModel @Inject constructor(
 
     fun triggerTestEvent() {
         viewModelScope.launch {
-            sendEvent(TracksListEvents.ShowTrackListDialog("Тестовый ивент для проверки диалога"))
+            sendEvent(TracksListEvents.ShowDownloadedListDialog("Тестовый ивент для проверки диалога"))
         }
     }
 

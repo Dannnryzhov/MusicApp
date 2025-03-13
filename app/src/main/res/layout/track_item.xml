@@ -54,7 +54,7 @@
         android:id="@+id/track_extra_icon"
         android:layout_width="@dimen/track_extra_icon_width"
         android:layout_height="@dimen/track_extra_icon_height"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:layout_marginStart="@dimen/padding_small"
         android:src="@drawable/ic_downloaded"
         android:contentDescription="@string/downloaded"

@@ -6,6 +6,7 @@ import com.example.musicapp.domain.models.TrackEntity
 import com.example.musicapp.domain.usecases.GetTracksListUseCase
 import com.example.musicapp.domain.usecases.ManageDownloadedTracksUseCase
 import com.example.musicapp.domain.usecases.SearchTracksUseCase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,6 +15,8 @@ class TracksListViewModel @Inject constructor(
     private val manageDownloadedTracksUseCase: ManageDownloadedTracksUseCase,
     private val searchTracksUseCase: SearchTracksUseCase
 ) : SearchTracksViewModel() {
+
+    val downloadedTracks: Flow<List<TrackEntity>> = manageDownloadedTracksUseCase.getDownloaded()
 
     init {
         fetchTracks()

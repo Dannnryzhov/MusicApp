@@ -43,6 +43,7 @@ class TracksListFragment : BaseFragment<FragmentTracksListBinding, TracksListVie
             setupSearch()
             setupNavigation()
             observeEvents()
+            observeDownloadedTracks()
     }
 
     private val tracksAdapter: TracksAdapter by lazy {
@@ -64,6 +65,14 @@ class TracksListFragment : BaseFragment<FragmentTracksListBinding, TracksListVie
         viewModel.tracks
             .onEach { tracks -> tracksAdapter.submitList(tracks) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun observeDownloadedTracks() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.downloadedTracks.collect { downloaded ->
+                tracksAdapter.updateDownloadedTracks(downloaded)
+            }
+        }
     }
 
     private fun observeEvents() {
