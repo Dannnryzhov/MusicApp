@@ -41,7 +41,6 @@ class TracksListFragment : BaseFragment<FragmentTracksListBinding, TracksListVie
             setupRecyclerView()
             observeTracks()
             setupSearch()
-            setupNavigation()
             observeEvents()
             observeDownloadedTracks()
     }
@@ -111,13 +110,6 @@ class TracksListFragment : BaseFragment<FragmentTracksListBinding, TracksListVie
                 tracksAdapter.submitList(searchResults)
             }
         }
-    }
-
-    private fun setupNavigation() {
-        binding.navigationContainer.findViewById<View>(R.id.nav_downloaded)
-            .setOnClickListener {
-                findNavController().navigate(R.id.action_tracksListFragment_to_downloadedTracksFragment)
-            }
     }
 
     private fun onTrackClicked(track: TrackEntity) {

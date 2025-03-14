@@ -2,7 +2,9 @@ package com.example.musicapp.di
 
 import android.app.Application
 import com.example.musicapp.presentation.ui.activities.TracksListActivity
+import com.example.musicapp.presentation.ui.fragments.BaseFragment
 import com.example.musicapp.presentation.ui.fragments.DownloadedTracksFragment
+import com.example.musicapp.presentation.ui.fragments.HostFragment
 import com.example.musicapp.presentation.ui.fragments.TracksListFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -21,6 +23,7 @@ interface AppComponent {
     fun inject(activity: TracksListActivity)
     fun inject(fragment: TracksListFragment)
     fun inject(fragment: DownloadedTracksFragment)
+    fun inject(fragment: HostFragment)
     @Component.Factory
     interface Factory {
         fun create(@BindsInstance application: Application): AppComponent

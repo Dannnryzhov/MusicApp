@@ -22,5 +22,4 @@
             android:id="@+id/action_downloadedTracksFragment_to_tracksListFragment"
             app:destination="@id/tracksListFragment"/>
     </fragment>
-
 </navigation>
