@@ -13,74 +13,19 @@
         app:navGraph="@navigation/nav_graph"
         app:defaultNavHost="false"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/navigation_container"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <LinearLayout
-        android:id="@+id/navigation_container"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/navigation_background"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:gravity="center"
+        android:background="@color/search_background"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:id="@+id/nav_home"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="@drawable/ripple_custom"
-            android:gravity="center"
-            android:padding="@dimen/padding_small">
-
-            <ImageView
-                android:id="@+id/nav_home_icon"
-                android:layout_width="@dimen/nav_icon_width"
-                android:layout_height="@dimen/nav_icon_height"
-                android:src="@drawable/ic_home"
-                android:contentDescription="@string/home" />
-
-            <TextView
-                android:id="@+id/nav_home_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/home"
-                android:textColor="@color/white"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/nav_downloaded"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="@dimen/padding_small"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="@drawable/ripple_custom">
-
-            <ImageView
-                android:id="@+id/nav_downloaded_icon"
-                android:layout_width="@dimen/nav_icon_width"
-                android:layout_height="@dimen/nav_icon_height"
-                android:src="@drawable/ic_downloaded"
-                android:contentDescription="@string/downloaded" />
-
-            <TextView
-                android:id="@+id/nav_downloaded_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/downloaded"
-                android:textColor="@color/white"/>
-        </LinearLayout>
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

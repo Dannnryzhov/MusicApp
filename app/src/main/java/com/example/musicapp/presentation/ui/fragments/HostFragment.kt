@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.example.musicapp.R
 import com.example.musicapp.databinding.FragmentHostBinding
 import com.example.musicapp.presentation.application.MusicApp
@@ -39,15 +40,6 @@ class HostFragment : BaseFragment<FragmentHostBinding, HostViewModel>() {
         val navHostFragment = childFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        binding.root.findViewById<View>(R.id.nav_home).setOnClickListener {
-            if (navController.currentDestination?.id != R.id.tracksListFragment) {
-                navController.navigate(R.id.tracksListFragment)
-            }
-        }
-        binding.root.findViewById<View>(R.id.nav_downloaded).setOnClickListener {
-            if (navController.currentDestination?.id != R.id.downloadedTracksFragment) {
-                navController.navigate(R.id.downloadedTracksFragment)
-            }
-        }
+        NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
     }
 }
