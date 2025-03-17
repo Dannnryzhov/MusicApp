@@ -11,38 +11,25 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.musicapp.R
-import com.example.musicapp.databinding.FragmentTracksListBinding
+import com.example.musicapp.databinding.FragmentDownloadedTracksBinding
 import com.example.musicapp.domain.models.TrackEntity
 import com.example.musicapp.presentation.adapters.TracksAdapter
 import com.example.musicapp.presentation.application.MusicApp
+import com.example.musicapp.presentation.viewmodels.DownloadedTracksViewModel
 import com.example.musicapp.presentation.viewmodels.TracksListEvents
-import com.example.musicapp.presentation.viewmodels.TracksListViewModel
 import com.example.musicapp.presentation.viewmodels.ViewModelFactory
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TracksListFragment : BaseFragment<FragmentTracksListBinding, TracksListViewModel>() {
+class DownloadedTracksFragment : BaseFragment<FragmentDownloadedTracksBinding, DownloadedTracksViewModel>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    override val viewModel: TracksListViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[TracksListViewModel::class.java]
-    }
-
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentTracksListBinding {
-        return FragmentTracksListBinding.inflate(inflater, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-            setupRecyclerView()
-            observeTracks()
-            setupSearch()
-            observeEvents()
-            observeDownloadedTracks()
+    override val viewModel: DownloadedTracksViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[DownloadedTracksViewModel::class.java]
     }
 
     private val tracksAdapter: TracksAdapter by lazy {
@@ -50,6 +37,18 @@ class TracksListFragment : BaseFragment<FragmentTracksListBinding, TracksListVie
             onItemClick = { track -> onTrackClicked(track) },
             onItemLongClick = { track -> onTrackLongClicked(track) }
         )
+    }
+
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentDownloadedTracksBinding {
+        return FragmentDownloadedTracksBinding.inflate(inflater, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
+        observeTracks()
+        setupSearch()
+        observeEvents()
     }
 
     override fun injectDependencies() {
@@ -60,18 +59,23 @@ class TracksListFragment : BaseFragment<FragmentTracksListBinding, TracksListVie
         binding.tracksRecyclerView.adapter = tracksAdapter
     }
 
+    private fun setupSearch(){
+        binding.searchEditText.addTextChangedListener { editable ->
+            val query = editable?.toString() ?: ""
+            viewModel.search(query)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.searchResults.collect { searchResults ->
+                tracksAdapter.submitList(searchResults)
+            }
+        }
+    }
+
     private fun observeTracks() {
         viewModel.tracks
             .onEach { tracks -> tracksAdapter.submitList(tracks) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-
-    private fun observeDownloadedTracks() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.downloadedTracks.collect { downloaded ->
-                tracksAdapter.updateDownloadedTracks(downloaded)
-            }
-        }
     }
 
     private fun observeEvents() {
@@ -99,24 +103,11 @@ class TracksListFragment : BaseFragment<FragmentTracksListBinding, TracksListVie
             .show()
     }
 
-    private fun setupSearch() {
-        binding.searchEditText.addTextChangedListener { editable ->
-            val query = editable?.toString() ?: ""
-            viewModel.search(query)
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.searchResults.collect { searchResults ->
-                tracksAdapter.submitList(searchResults)
-            }
-        }
-    }
-
     private fun onTrackClicked(track: TrackEntity) {
         viewModel.triggerTestError()
     }
 
     private fun onTrackLongClicked(track: TrackEntity) {
-        viewModel.toggleDownloadedTrack(track)
+        viewModel.removeFromDownloaded(track)
     }
 }

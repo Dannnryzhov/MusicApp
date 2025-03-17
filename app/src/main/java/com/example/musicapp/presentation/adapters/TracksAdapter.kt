@@ -1,6 +1,7 @@
 package com.example.musicapp.presentation.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,8 +14,18 @@ class TracksAdapter(
     private val onItemLongClick: (TrackEntity) -> Unit
 ) : ListAdapter<TrackEntity, TracksAdapter.TrackViewHolder>(TrackDiffCallBack()) {
 
-    init {
-        setHasStableIds(true)
+    private var downloadedTrackIds: Set<Long> = emptySet()
+
+    fun updateDownloadedTracks(downloaded: List<TrackEntity>) {
+        val newDownloadedTrackIds = downloaded.map { it.id }.toSet()
+        currentList.forEachIndexed { index, track ->
+            val wasDownloaded = downloadedTrackIds.contains(track.id)
+            val isDownloaded = newDownloadedTrackIds.contains(track.id)
+            if (wasDownloaded != isDownloaded) {
+                notifyItemChanged(index)
+            }
+        }
+        downloadedTrackIds = newDownloadedTrackIds
     }
 
     override fun getItemId(position: Int): Long = getItem(position).id
@@ -30,6 +41,12 @@ class TracksAdapter(
                 .load(track.album.cover)
                 .centerCrop()
                 .into(binding.trackPicture)
+
+            binding.trackExtraIcon.visibility = if (downloadedTrackIds.contains(track.id)) {
+                View.VISIBLE
+            } else {
+                View.INVISIBLE
+            }
 
             binding.root.setOnClickListener { onItemClick(track) }
             binding.root.setOnLongClickListener {
